@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-layer Model Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #000000;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            transition: opacity 0.3s ease;
+        }
+        .navbar-brand:hover, .nav-link:hover {
+            opacity: 0.8;
+        }
+        .nav-item.active .nav-link {
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+        }
+        .main-content {
+            padding: 40px 0;
+        }
+        .card {
+            background-color: var(--card-background);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .form-group label {
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .table {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .table thead th {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-top: none;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0,0,0,.03);
+        }
+        .plot-container {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">N-layer Model</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Model</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center mb-0">Model Results</h2>
+                </div>
+                <div class="card-body position-relative">
+                    <!-- Buttons positioned in the top-right corner -->
+                    <div class="position-absolute top-0 end-0 mt-2 me-2">
+                        <button type="button" class="btn btn-primary mx-1" onclick="changeImage('risk_image.png')">Risk</button>
+                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('variability_image.png')">Variability</button>
+                        <button type="button" class="btn btn-danger mx-1" onclick="changeImage('threat_image.png')">Threat</button>
+                    </div>
+
+                    <!-- Image that will be dynamically updated -->
+                    <div class="text-center mt-4">
+                        <img id="dynamicImage" src="{{ url_for('static', filename=layer_image) }}" alt="Layer Configuration" class="img-fluid rounded mx-auto d-block">
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4><i class="fas fa-cog"></i> Configuration</h4>
+                            <form action="/results" method="post">
+                                <div class="form-group">
+                                    <label>Model Type:</label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" name="model_type" id="prob" value="prob" {% if model_type == 'prob' %}checked{% endif %}>
+                                        <label class="custom-control-label" for="prob">Probabilistic Model</label>
+                                    </div>
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input class="custom-control-input" type="radio" name="model_type" id="stra" value="stra" {% if model_type == 'stra' %}checked{% endif %}>
+                                        <label class="custom-control-label" for="stra">Strategic Model</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_layers">Total Layers:</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="slider" name="total_layers" id="total_layers" min="1" max="50" value="{{ total_layers }}" required>
+                                        <span id="total_layers_value" class="slider-value">{{ total_layers }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="C_bar_init">Cost:</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="slider" name="C_bar_init" id="C_bar_init" min="0" max="500" step="5" value="{{ C_bar_init }}" required>
+                                        <span id="C_bar_init_value" class="slider-value">{{ C_bar_init }}</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Results</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <h4><i class="fas fa-sitemap"></i> Game Tree</h4>
+                            <img src="{{ url_for('static', filename='image.png') }}" alt="Model Configuration Image" class="img-fluid rounded shadow-sm">
+                            <div id="model-description" class="model-description">
+                                {% if model_type == 'prob' %}
+                                Probabilistic model is to model Non-Strategic Attackers.
+                                {% else %}
+                                Strategic model is to model Strategic Attackers.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4><i class="fas fa-table"></i> Optimization Outputs</h4>
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Model</th>
+                                        <td>{{ model }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Solutions</th>
+                                        <td>{{ solutions }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h5 class="mt-4">Values:</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>s:</strong> {{ s }}</li>
+                                <li><strong>beta:</strong> {{ beta }}</li>
+                                <li><strong>alpha:</strong> {{ alpha }}</li>
+                                <li><strong>theta:</strong> {{ theta }}</li>
+                                <li><strong>gamma:</strong> {{ gamma }}</li>
+                                <li><strong>cost:</strong> {{ cost }}</li>
+                                <li><strong>C_bar:</strong> {{ C_bar }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4><i class="fas fa-chart-area"></i> Optimal Investment Across Layers</h4>
+                            <div class="plot-container">
+                                <img src="data:image/png;base64,{{ plot_url }}" alt="N-layer Results Plot" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function updateSliderValue(sliderId, valueId) {
+            const slider = document.getElementById(sliderId);
+            const output = document.getElementById(valueId);
+            output.innerHTML = slider.value;
+            slider.oninput = function() {
+                output.innerHTML = this.value;
+                updateSliderBackground(sliderId);
+            }
+        }
+
+        function updateSliderBackground(sliderId) {
+            const slider = document.getElementById(sliderId);
+            const percentage = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percentage}%, #d3d3d3 ${percentage}%, #d3d3d3 100%)`;
+        }
+
+        updateSliderValue('total_layers', 'total_layers_value');
+        updateSliderValue('C_bar_init', 'C_bar_init_value');
+
+        // Initial call to set the background on page load
+        updateSliderBackground('total_layers');
+        updateSliderBackground('C_bar_init');
+    </script>
+        <!-- JavaScript function to change the image -->
+    <script>
+            function changeImage(imageName) {
+                document.getElementById('dynamicImage').src = "{{ url_for('static', filename='') }}" + imageName;
+            }
+    </script>
+    
+</body>
+</html>

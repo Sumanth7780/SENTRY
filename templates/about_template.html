@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - N-layer Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            transition: opacity 0.3s ease;
+        }
+        .navbar-brand:hover, .nav-link:hover {
+            opacity: 0.8;
+        }
+        .nav-item.active .nav-link {
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+        }
+        .main-content {
+            padding: 40px 0;
+        }
+        .card {
+            background-color: var(--card-background);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+        }
+        .card-header h2 {
+            color: #FFFFFF;  /* Changed to white */
+        }
+        .card-body {
+            padding: 30px;
+        }
+        h2 {
+            color: var(--primary-color);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">N-layer Model</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Model</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center mb-0">About the N-layer Model</h2>
+                </div>
+                <div class="card-body">
+                    <p>The N-layer Model is an advanced tool for analyzing and optimizing multi-layered security systems. It provides two main types of analysis:</p>
+                    <ul>
+                        <li><strong>Probabilistic Model:</strong> This model is designed to analyze systems facing non-strategic attackers. It helps in understanding the probabilistic nature of attacks and defenses across multiple layers.</li>
+                        <li><strong>Strategic Model:</strong> This model is tailored for systems dealing with strategic attackers. It incorporates game-theoretic concepts to model the strategic interactions between defenders and attackers.</li>
+                    </ul>
+                    <p>Our model allows you to configure the number of layers and associated costs, providing a comprehensive view of optimal investment strategies across different security layers.</p>
+                    <p>Whether you're a security professional, researcher, or decision-maker, the N-layer Model offers valuable insights into creating robust, multi-layered security systems.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
