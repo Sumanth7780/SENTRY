@@ -78,6 +78,23 @@
             border-color: #0056b3;
             transform: scale(1.05);
         }
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 160px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 1px;
+            position: absolute;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
         .table {
             background-color: var(--card-background);
             border-radius: 10px;
@@ -102,6 +119,12 @@
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+        }
+        .btn-group-fixed {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 100; /* Ensuring buttons appear above content */
         }
     </style>
 </head>
@@ -135,17 +158,19 @@
                     <h2 class="text-center mb-0">Model Results</h2>
                 </div>
                 <div class="card-body position-relative">
-                    <!-- Buttons positioned in the top-right corner -->
-                    <div class="position-absolute top-0 end-0 mt-2 me-2">
-                        <button type="button" class="btn btn-primary mx-1" onclick="changeImage('risk_image.png')">Risk</button>
-                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('variability_image.png')">Variability</button>
-                        <button type="button" class="btn btn-danger mx-1" onclick="changeImage('threat_image.png')">Threat</button>
+                    <!-- Buttons in the top-right corner -->
+                    <div class="btn-group-fixed">
+                        <button type="button" class="btn btn-primary mx-1" onclick="changeImage('risk_image.png')">consequence</button>
+                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('risk_image.png')">Variability</button>
+                        <button type="button" class="btn btn-danger mx-1" onclick="changeImage('risk_image.png')">Threat</button>
                     </div>
 
-                    <!-- Image that will be dynamically updated -->
-                    <div class="text-center mt-4">
+                    <!-- Image with tooltip that follows the cursor -->
+                    <div class="tooltip-container text-center mt-4" onmousemove="moveTooltip(event)" onmouseout="hideTooltip()">
                         <img id="dynamicImage" src="{{ url_for('static', filename=layer_image) }}" alt="Layer Configuration" class="img-fluid rounded mx-auto d-block">
+                        <span class="tooltip-text" id="tooltip-text">consequence:  ,Varnability: ,Threat: </span>
                     </div>
+                    
 
                     <div class="row mt-4">
                         <div class="col-md-6">
@@ -228,6 +253,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // JavaScript function to change the image based on the button clicked
+        function changeImage(imageName) {
+            document.getElementById('dynamicImage').src = "{{ url_for('static', filename='') }}" + imageName;
+        }
+
+        // Move tooltip with cursor, and make it appear right on top of the pointer
+        function moveTooltip(event) {
+            var tooltip = document.getElementById('tooltip-text');
+            var x = event.pageX;
+            var y = event.pageY;
+            
+            // Position tooltip exactly on top of the cursor
+            tooltip.style.top = (y - tooltip.offsetHeight - 10) + 'px'; // Offset above the cursor
+            tooltip.style.left = (x - tooltip.offsetWidth / 2) + 'px';  // Centered horizontally
+
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = 1;
+        }
+
+        // Hide tooltip when mouse leaves the image
+        function hideTooltip() {
+            var tooltip = document.getElementById('tooltip-text');
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = 0;
+        }
+
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
