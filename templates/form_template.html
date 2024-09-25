@@ -210,6 +210,30 @@
                                         <span id="C_bar_init_value" class="slider-value">0</span>
                                     </div>
                                 </div>
+
+                                <!-- New Sliders -->
+                                <div class="form-group">
+                                    <label for="sigma">Sigma (σ):</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="slider" name="sigma" id="sigma" min="0" max="1" step="0.01" value="0.5" required>
+                                        <span id="sigma_value" class="slider-value">0.5</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="theta">Theta (θ):</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="slider" name="theta" id="theta" min="0" max="5" step="0.1" value="2.5" required>
+                                        <span id="theta_value" class="slider-value">2.5</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s_ij">S_ij:</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="slider" name="s_ij" id="s_ij" min="0" max="5" step="0.1" value="2.5" required>
+                                        <span id="s_ij_value" class="slider-value">2.5</span>
+                                    </div>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary btn-block">Solve </button>
                             </form>
                         </div>
@@ -248,10 +272,16 @@
 
         updateSliderValue('total_layers', 'total_layers_value');
         updateSliderValue('C_bar_init', 'C_bar_init_value');
+        updateSliderValue('sigma', 'sigma_value');
+        updateSliderValue('theta', 'theta_value');
+        updateSliderValue('s_ij', 's_ij_value');
 
         // Initial call to set the background on page load
         updateSliderBackground('total_layers');
         updateSliderBackground('C_bar_init');
+        updateSliderBackground('sigma');
+        updateSliderBackground('theta');
+        updateSliderBackground('s_ij');
 
         // Update model description based on selected model type
         const modelTypeInputs = document.querySelectorAll('input[name="model_type"]');
@@ -269,5 +299,3 @@
     </script>
 </body>
 </html>
-
-

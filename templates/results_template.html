@@ -160,9 +160,10 @@
                 <div class="card-body position-relative">
                     <!-- Buttons in the top-right corner -->
                     <div class="btn-group-fixed">
+                        <button type="button" class="btn btn-success mx-1" onclick="changeImage('{{ layer_image }}')">Return to Main</button>
                         <button type="button" class="btn btn-primary mx-1" onclick="changeImage('risk_image.png')">consequence</button>
-                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('risk_image.png')">Variability</button>
-                        <button type="button" class="btn btn-danger mx-1" onclick="changeImage('risk_image.png')">Threat</button>
+                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('V_image.png')">Variability</button>
+                        <button type="button" class="btn btn-danger mx-1" onclick="changeImage('T_image.png')">Threat</button>
                     </div>
 
                     <!-- Image with tooltip that follows the cursor -->
@@ -280,7 +281,10 @@
             tooltip.style.visibility = 'hidden';
             tooltip.style.opacity = 0;
         }
-
+        // JavaScript function to change the image based on the button clicked
+        function changeImage(imageName) {
+            document.getElementById('dynamicImage').src = "{{ url_for('static', filename='" + imageName + "') }}";
+        }
 
     </script>
 
