@@ -218,7 +218,7 @@ def index():
             gamma=str(obj2.gamma),
             cost=str(obj2.cost),
             C_bar=str(obj2.C_bar),
-            layer_image=layer_image)  # New parameter for layer-specific image
+            layer_image=layer_image, consequence="0.5", vulnerability="0.56", threat="0.5")  # New parameter for layer-specific image
 
     return render_template('form_template.html')
 

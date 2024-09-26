@@ -162,91 +162,107 @@
                     <div class="btn-group-fixed">
                         <button type="button" class="btn btn-success mx-1" onclick="changeImage('{{ layer_image }}')">Return to Main</button>
                         <button type="button" class="btn btn-primary mx-1" onclick="changeImage('risk_image.png')">consequence</button>
-                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('V_image.png')">Variability</button>
+                        <button type="button" class="btn btn-secondary mx-1" onclick="changeImage('V_image.png')">Vulnerability</button>
                         <button type="button" class="btn btn-danger mx-1" onclick="changeImage('T_image.png')">Threat</button>
                     </div>
-
                     <!-- Image with tooltip that follows the cursor -->
-                    <div class="tooltip-container text-center mt-4" onmousemove="moveTooltip(event)" onmouseout="hideTooltip()">
+                    <div class="text-center mt-4">
                         <img id="dynamicImage" src="{{ url_for('static', filename=layer_image) }}" alt="Layer Configuration" class="img-fluid rounded mx-auto d-block">
-                        <span class="tooltip-text" id="tooltip-text">consequence:  ,Varnability: ,Threat: </span>
                     </div>
                     
-
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <h4><i class="fas fa-cog"></i> Configuration</h4>
-                            <form action="/results" method="post">
-                                <div class="form-group">
-                                    <label>Model Type:</label>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" name="model_type" id="prob" value="prob" {% if model_type == 'prob' %}checked{% endif %}>
-                                        <label class="custom-control-label" for="prob">Probabilistic Model</label>
-                                    </div>
-                                    <div class="custom-control custom-radio mt-2">
-                                        <input class="custom-control-input" type="radio" name="model_type" id="stra" value="stra" {% if model_type == 'stra' %}checked{% endif %}>
-                                        <label class="custom-control-label" for="stra">Strategic Model</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="total_layers">Total Layers:</label>
-                                    <div class="slider-container">
-                                        <input type="range" class="slider" name="total_layers" id="total_layers" min="1" max="50" value="{{ total_layers }}" required>
-                                        <span id="total_layers_value" class="slider-value">{{ total_layers }}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="C_bar_init">Cost:</label>
-                                    <div class="slider-container">
-                                        <input type="range" class="slider" name="C_bar_init" id="C_bar_init" min="0" max="500" step="5" value="{{ C_bar_init }}" required>
-                                        <span id="C_bar_init_value" class="slider-value">{{ C_bar_init }}</span>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Update Results</button>
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <h4><i class="fas fa-sitemap"></i> Game Tree</h4>
-                            <img src="{{ url_for('static', filename='image.png') }}" alt="Model Configuration Image" class="img-fluid rounded shadow-sm">
-                            <div id="model-description" class="model-description">
-                                {% if model_type == 'prob' %}
-                                Probabilistic model is to model Non-Strategic Attackers.
-                                {% else %}
-                                Strategic model is to model Strategic Attackers.
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <h4><i class="fas fa-table"></i> Optimization Outputs</h4>
                             <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Layers</th>
+                                        <th>Consequence</th>
+                                        <th>Vulnerability</th>
+                                        <th>Threat</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
+                                    <!-- Assuming you're passing lists of data for layers, consequence, vulnerability, and threat -->
+                                    
+                                    
                                     <tr>
-                                        <th>Model</th>
-                                        <td>{{ model }}</td>
+                                        <td>{{ total_layers }}</td>
+                                        <td>{{ consequence }}</td>
+                                        <td>{{ vulnerability }}</td>
+                                        <td>{{ threat }}</td>
                                     </tr>
-                                    <tr>
-                                        <th>Solutions</th>
-                                        <td>{{ solutions }}</td>
-                                    </tr>
+                                    
+                                    
                                 </tbody>
                             </table>
-                            <h5 class="mt-4">Values:</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>s:</strong> {{ s }}</li>
-                                <li><strong>beta:</strong> {{ beta }}</li>
-                                <li><strong>alpha:</strong> {{ alpha }}</li>
-                                <li><strong>theta:</strong> {{ theta }}</li>
-                                <li><strong>gamma:</strong> {{ gamma }}</li>
-                                <li><strong>cost:</strong> {{ cost }}</li>
-                                <li><strong>C_bar:</strong> {{ C_bar }}</li>
-                            </ul>
                         </div>
-                        <div class="col-md-6">
-                            <h4><i class="fas fa-chart-area"></i> Optimal Investment Across Layers</h4>
-                            <div class="plot-container">
-                                <img src="data:image/png;base64,{{ plot_url }}" alt="N-layer Results Plot" class="img-fluid rounded">
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h4><i class="fas fa-cog"></i> Configuration</h4>
+                                <form action="/results" method="post">
+                                    
+                                    <div class="form-group">
+                                        <label for="total_layers">Total Layers:</label>
+                                        <div class="slider-container">
+                                            <input type="range" class="slider" name="total_layers" id="total_layers" min="1" max="50" value="{{ total_layers }}" required>
+                                            <span id="total_layers_value" class="slider-value">{{ total_layers }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="C_bar_init">Cost:</label>
+                                        <div class="slider-container">
+                                            <input type="range" class="slider" name="C_bar_init" id="C_bar_init" min="0" max="500" step="5" value="{{ C_bar_init }}" required>
+                                            <span id="C_bar_init_value" class="slider-value">{{ C_bar_init }}</span>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Results</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h4><i class="fas fa-sitemap"></i> Game Tree</h4>
+                                <img src="{{ url_for('static', filename='image.png') }}" alt="Model Configuration Image" class="img-fluid rounded shadow-sm">
+                                <div id="model-description" class="model-description">
+                                    {% if model_type == 'prob' %}
+                                    Probabilistic model is to model Non-Strategic Attackers.
+                                    {% else %}
+                                    Strategic model is to model Strategic Attackers.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h4><i class="fas fa-table"></i> Optimization Outputs</h4>
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th>Model</th>
+                                            <td>{{ model }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Solutions</th>
+                                            <td>{{ solutions }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <h5 class="mt-4">Values:</h5>
+                                <ul class="list-unstyled">
+                                    <li><strong>s:</strong> {{ s }}</li>
+                                    <li><strong>beta:</strong> {{ beta }}</li>
+                                    <li><strong>alpha:</strong> {{ alpha }}</li>
+                                    <li><strong>theta:</strong> {{ theta }}</li>
+                                    <li><strong>gamma:</strong> {{ gamma }}</li>
+                                    <li><strong>cost:</strong> {{ cost }}</li>
+                                    <li><strong>C_bar:</strong> {{ C_bar }}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4><i class="fas fa-chart-area"></i> Optimal Investment Across Layers</h4>
+                                <div class="plot-container">
+                                    <img src="data:image/png;base64,{{ plot_url }}" alt="N-layer Results Plot" class="img-fluid rounded">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -256,36 +272,9 @@
     </div>
 
     <script>
-        // JavaScript function to change the image based on the button clicked
-        function changeImage(imageName) {
-            document.getElementById('dynamicImage').src = "{{ url_for('static', filename='') }}" + imageName;
-        }
-
-        // Move tooltip with cursor, and make it appear right on top of the pointer
-        function moveTooltip(event) {
-            var tooltip = document.getElementById('tooltip-text');
-            var x = event.pageX;
-            var y = event.pageY;
-            
-            // Position tooltip exactly on top of the cursor
-            tooltip.style.top = (y - tooltip.offsetHeight - 10) + 'px'; // Offset above the cursor
-            tooltip.style.left = (x - tooltip.offsetWidth / 2) + 'px';  // Centered horizontally
-
-            tooltip.style.visibility = 'visible';
-            tooltip.style.opacity = 1;
-        }
-
-        // Hide tooltip when mouse leaves the image
-        function hideTooltip() {
-            var tooltip = document.getElementById('tooltip-text');
-            tooltip.style.visibility = 'hidden';
-            tooltip.style.opacity = 0;
-        }
-        // JavaScript function to change the image based on the button clicked
         function changeImage(imageName) {
             document.getElementById('dynamicImage').src = "{{ url_for('static', filename='" + imageName + "') }}";
         }
-
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

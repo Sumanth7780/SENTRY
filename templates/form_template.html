@@ -59,10 +59,6 @@
         .card-body {
             padding: 30px;
         }
-        .card-body h4 i {
-            color: #000000;
-            margin-right: 10px;
-        }
         .form-group label {
             font-weight: 500;
             color: var(--secondary-color);
@@ -80,12 +76,6 @@
             background-color: #0056b3;
             border-color: #0056b3;
             transform: scale(1.05);
-        }
-        .model-description {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 16px;
-            color: var(--secondary-color);
         }
         .slider-container {
             display: flex;
@@ -126,15 +116,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
         }
-        .slider::-webkit-slider-thumb:hover,
-        .slider::-moz-range-thumb:hover {
-            background-color: #0056b3;
-            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-        .slider:active::-webkit-slider-thumb,
-        .slider:active::-moz-range-thumb {
-            background-color: #004085;
-        }
         .slider-value {
             min-width: 50px;
             text-align: center;
@@ -145,10 +126,19 @@
             padding: 5px 10px;
             border-radius: 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-right: 10px;
         }
         .custom-control-input:checked ~ .custom-control-label::before {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            font-size: 16px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
         }
     </style>
 </head>
@@ -199,38 +189,43 @@
                                 <div class="form-group">
                                     <label for="total_layers">Total Layers:</label>
                                     <div class="slider-container">
-                                        <input type="range" class="slider" name="total_layers" id="total_layers" min="1" max="50" value="1" required>
-                                        <span id="total_layers_value" class="slider-value">1</span>
+                                        <input type="range" class="slider" name="total_layers" id="total_layers" min="1" max="4" value="1" step="1" required oninput="syncSliderWithInput('total_layers', 'total_layers_input')">
+                                        <span class="slider-value" id="total_layers_value">1</span>
+                                        <input type="number" id="total_layers_input" min="1" max="50" value="1" step="1" oninput="syncInputWithSlider('total_layers_input', 'total_layers')">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="C_bar_init">Cost:</label>
                                     <div class="slider-container">
-                                        <input type="range" class="slider" name="C_bar_init" id="C_bar_init" min="0" max="500" step="5" value="0" required>
-                                        <span id="C_bar_init_value" class="slider-value">0</span>
+                                        <input type="range" class="slider" name="C_bar_init" id="C_bar_init" min="0" max="500" step="5" value="0" required oninput="syncSliderWithInput('C_bar_init', 'C_bar_init_input')">
+                                        <span class="slider-value" id="C_bar_init_value">0</span>
+                                        <input type="number" id="C_bar_init_input" min="0" max="500" value="0" step="5" oninput="syncInputWithSlider('C_bar_init_input', 'C_bar_init')">
                                     </div>
                                 </div>
 
-                                <!-- New Sliders -->
+                                <!-- New Sliders and Input Fields -->
                                 <div class="form-group">
-                                    <label for="sigma">Sigma (σ):</label>
+                                    <label for="sigma">σ:</label>
                                     <div class="slider-container">
-                                        <input type="range" class="slider" name="sigma" id="sigma" min="0" max="1" step="0.01" value="0.5" required>
-                                        <span id="sigma_value" class="slider-value">0.5</span>
+                                        <input type="range" class="slider" name="sigma" id="sigma" min="0" max="1" step="0.01" value="0.5" required oninput="syncSliderWithInput('sigma', 'sigma_input')">
+                                        <span class="slider-value" id="sigma_value">0.5</span>
+                                        <input type="number" id="sigma_input" min="0" max="1" step="0.01" value="0.5" oninput="syncInputWithSlider('sigma_input', 'sigma')">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="theta">Theta (θ):</label>
+                                    <label for="theta">θ:</label>
                                     <div class="slider-container">
-                                        <input type="range" class="slider" name="theta" id="theta" min="0" max="5" step="0.1" value="2.5" required>
-                                        <span id="theta_value" class="slider-value">2.5</span>
+                                        <input type="range" class="slider" name="theta" id="theta" min="0" max="5" step="0.1" value="2.5" required oninput="syncSliderWithInput('theta', 'theta_input')">
+                                        <span class="slider-value" id="theta_value">2.5</span>
+                                        <input type="number" id="theta_input" min="0" max="5" step="0.1" value="2.5" oninput="syncInputWithSlider('theta_input', 'theta')">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="s_ij">S_ij:</label>
+                                    <label for="s_ij">Sij:</label>
                                     <div class="slider-container">
-                                        <input type="range" class="slider" name="s_ij" id="s_ij" min="0" max="5" step="0.1" value="2.5" required>
-                                        <span id="s_ij_value" class="slider-value">2.5</span>
+                                        <input type="range" class="slider" name="s_ij" id="s_ij" min="0" max="5" step="0.1" value="2.5" required oninput="syncSliderWithInput('s_ij', 's_ij_input')">
+                                        <span class="slider-value" id="s_ij_value">2.5</span>
+                                        <input type="number" id="s_ij_input" min="0" max="5" step="0.1" value="2.5" oninput="syncInputWithSlider('s_ij_input', 's_ij')">
                                     </div>
                                 </div>
 
@@ -238,10 +233,11 @@
                             </form>
                         </div>
                         <div class="col-md-6">
-                            <h4 class="text-center mb-4"><i class="fas fa-sitemap"></i> Game Tree </h4>
-                            <img src="{{ url_for('static', filename='image.png') }}" alt="Model Configuration Image" class="img-fluid rounded shadow">
+                            <h4 class="text-center mb-4"><i class="fas fa-sitemap"></i> Layers </h4>
+                            <!-- Decision Tree Image -->
+                            <img id="decisionTreeImage" src="{{ url_for('static', filename='layer4.png') }}" alt="Layer Configuration" class="img-fluid rounded shadow">
                             <div id="model-description" class="model-description mt-4">
-                                <p>The Probabilistic model is designed to analyze systems facing non-strategic attackers, providing insights into multi-layered security dynamics.</p>
+                                <p></p>
                             </div>
                         </div>
                     </div>
@@ -254,14 +250,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        function updateSliderValue(sliderId, valueId) {
+        function syncSliderWithInput(sliderId, inputId) {
             const slider = document.getElementById(sliderId);
-            const output = document.getElementById(valueId);
-            output.innerHTML = slider.value;
-            slider.oninput = function() {
-                output.innerHTML = this.value;
-                updateSliderBackground(sliderId);
-            }
+            const input = document.getElementById(inputId);
+            const valueDisplay = document.getElementById(sliderId + '_value');
+            input.value = slider.value;
+            valueDisplay.innerText = slider.value;
+            updateSliderBackground(sliderId);
+        }
+
+        function syncInputWithSlider(inputId, sliderId) {
+            const input = document.getElementById(inputId);
+            const slider = document.getElementById(sliderId);
+            const valueDisplay = document.getElementById(sliderId + '_value');
+            slider.value = input.value;
+            valueDisplay.innerText = input.value;
+            updateSliderBackground(sliderId);
         }
 
         function updateSliderBackground(sliderId) {
@@ -270,32 +274,11 @@
             slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percentage}%, #d3d3d3 ${percentage}%, #d3d3d3 100%)`;
         }
 
-        updateSliderValue('total_layers', 'total_layers_value');
-        updateSliderValue('C_bar_init', 'C_bar_init_value');
-        updateSliderValue('sigma', 'sigma_value');
-        updateSliderValue('theta', 'theta_value');
-        updateSliderValue('s_ij', 's_ij_value');
-
-        // Initial call to set the background on page load
         updateSliderBackground('total_layers');
         updateSliderBackground('C_bar_init');
         updateSliderBackground('sigma');
         updateSliderBackground('theta');
         updateSliderBackground('s_ij');
-
-        // Update model description based on selected model type
-        const modelTypeInputs = document.querySelectorAll('input[name="model_type"]');
-        const modelDescription = document.getElementById('model-description');
-
-        modelTypeInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'prob') {
-                    modelDescription.innerHTML = '<p>The Probabilistic model is designed to analyze systems facing non-strategic attackers, providing insights into multi-layered security dynamics.</p>';
-                } else {
-                    modelDescription.innerHTML = '<p>The Strategic model is tailored for systems dealing with strategic attackers, incorporating game-theoretic concepts to model complex security interactions.</p>';
-                }
-            });
-        });
     </script>
 </body>
 </html>
