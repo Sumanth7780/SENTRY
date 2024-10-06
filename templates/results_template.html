@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        :root {
+                :root {
             --primary-color: #007bff;
             --secondary-color: #000000;
             --background-color: #ecf0f1;
@@ -60,11 +60,6 @@
         .card-body {
             padding: 30px;
         }
-        .form-group label {
-            font-weight: 500;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-        }
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -78,54 +73,51 @@
             border-color: #0056b3;
             transform: scale(1.05);
         }
-        .tooltip-container {
+        .nested-boxes-container {
             position: relative;
-            display: inline-block;
+            width: 300px;
+            height: 300px;
+            margin: auto;
         }
-        .tooltip-text {
-            visibility: hidden;
-            width: 160px;
-            background-color: #333;
-            color: #fff;
+        .table-container {
+            margin-top: 30px;
+        }
+        .dynamic-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .dynamic-table th, .dynamic-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
             text-align: center;
-            border-radius: 2px;
-            padding: 1px;
+        }
+        .dynamic-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .dynamic-table td {
+            background-color: #f9f9f9;
+        }
+        .nested-boxes-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: auto;
+        }
+
+        .tooltip-box {
+            border: 2px solid black;
             position: absolute;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            cursor: pointer;
         }
-        .table {
-            background-color: var(--card-background);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .table thead th {
-            background-color: var(--primary-color);
-            color: #fff;
-            border-top: none;
-        }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0,0,0,.03);
-        }
-        .plot-container {
-            background-color: var(--card-background);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .plot-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-        .btn-group-fixed {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 100; /* Ensuring buttons appear above content */
-        }
+
     </style>
 </head>
 <body>
@@ -169,7 +161,24 @@
                     <div class="text-center mt-4">
                         <img id="dynamicImage" src="{{ url_for('static', filename=layer_image) }}" alt="Layer Configuration" class="img-fluid rounded mx-auto d-block">
                     </div>
+                    <div class="container">
+                        <div class="main-content">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="text-center mb-0">Model Results</h2>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Nested boxes container -->
+                                    <div class="nested-boxes-container"></div>
+                                    <!-- Table container -->
+                                    <div class="table-container" id="tableContainer"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
                     
+
                     
                     <div class="row mt-4">
                         <div class="col-md-6">
@@ -310,6 +319,92 @@
                 document.getElementById('dynamicImage').src = "{{ url_for('static', filename='') }}" + imageName;
             }
     </script>
-    
+    <script>
+        // Function to dynamically create nested boxes
+        function updateNestedBoxes(layerCount) {
+            const container = document.querySelector('.nested-boxes-container');
+            container.innerHTML = ''; // Clear existing boxes
+            let currentSize = 300; // Initial size for the largest box
+
+            // Example data for each layer (you can update this with real data)
+            const layerData = [
+                { layer: 1, consequence: "Low", vulnerability: "High", threat: "Medium" },
+                { layer: 2, consequence: "Medium", vulnerability: "Medium", threat: "High" },
+                { layer: 3, consequence: "High", vulnerability: "Low", threat: "Low" },
+                { layer: 4, consequence: "Critical", vulnerability: "Critical", threat: "Critical" }
+                // Add more layer data if needed
+            ];
+
+            for (let i = 0; i < layerCount; i++) {
+                const box = document.createElement('div');
+                box.style.width = `${currentSize}px`;
+                box.style.height = `${currentSize}px`;
+                box.style.backgroundColor = getRandomColor();
+                box.innerText = `Layer ${i + 1}`;
+                box.className = 'tooltip-box';
+                container.appendChild(box);
+
+                // Event listener to create a table on box click
+                box.onclick = function() {
+                    createTable(layerData[i], i + 1);
+                };
+
+                currentSize -= 50; // Decrease size for each nested box
+            }
+        }
+
+        // Function to create a dynamic table based on layer data
+        function createTable(data, layerNumber) {
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.innerHTML = ''; // Clear existing table if any
+
+            // Create table dynamically
+            const table = document.createElement('table');
+            table.className = 'dynamic-table';
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table headers
+            const headers = ['Layer', 'Consequence', 'Vulnerability', 'Threat'];
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Create a row for the data
+            const dataRow = document.createElement('tr');
+            const dataArray = [layerNumber, data.consequence, data.vulnerability, data.threat];
+            dataArray.forEach(value => {
+                const td = document.createElement('td');
+                td.innerText = value;
+                dataRow.appendChild(td);
+            });
+            tbody.appendChild(dataRow);
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+        }
+
+        // Random color generator for box background
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Initialize boxes with dynamic table functionality
+        window.onload = function() {
+            const totalLayers = 4;  // Set the total number of layers dynamically if needed
+            updateNestedBoxes(totalLayers);
+        };
+    </script>
+
 </body>
 </html>
